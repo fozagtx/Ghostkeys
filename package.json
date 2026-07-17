@@ -3,7 +3,7 @@
   "private": true,
   "description": "GhostKeys monorepo — deployable web app lives in web/",
   "engines": {
-    "node": ">=22.12.0"
+    "node": ">=20"
   },
   "workspaces": [
     "web"

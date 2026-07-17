@@ -1,0 +1,11 @@
+**/node_modules
+**/dist
+**/.astro
+**/.git
+**/.env
+**/.env.*
+**/debug-*.png
+**/layout-*.png
+.playwright-mcp
+contracts
+*.md
