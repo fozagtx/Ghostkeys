@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" fill="none" role="img" aria-label="GhostKeys">
+  <rect width="128" height="128" rx="28" fill="#F4F4F5"/>
+  <circle cx="64" cy="68" r="52" fill="#0F8A52" fill-opacity="0.1"/>
+  <!-- ghost body -->
+  <path
+    fill="#0F8A52"
+    d="M64 16C42.5 16 25 33.1 25 54c0 6.3 1.3 12.3 3.7 17.6v22.5c0 3.4 3.9 5.1 6.3 2.8l6.7-6.1 6.7 6.1c2.4 2.2 6.3.6 6.3-2.8V88l6.5 5.9c2.4 2.2 6.2.6 6.2-2.8V88l6.5 5.9c2.4 2.2 6.2.6 6.2-2.8V88l6.7 6.1c2.4 2.2 6.3.6 6.3-2.8V71.6C101.7 66.3 103 60.3 103 54 103 33.1 85.5 16 64 16z"
+  />
+  <ellipse cx="64" cy="52" rx="26" ry="22" fill="#F4FFF8"/>
+  <!-- eyes -->
+  <circle cx="53" cy="50" r="6" fill="#11181C"/>
+  <circle cx="75" cy="50" r="6" fill="#11181C"/>
+  <circle cx="55" cy="48" r="2" fill="#FFFFFF"/>
+  <circle cx="77" cy="48" r="2" fill="#FFFFFF"/>
+  <!-- smile -->
+  <path d="M56 62c2.2 3 5.4 4.5 8 4.5s5.8-1.5 8-4.5" stroke="#0B6B40" stroke-width="3" stroke-linecap="round"/>
+  <!-- key medallion -->
+  <circle cx="64" cy="84" r="11" fill="#E8F8F0" stroke="#053A24" stroke-width="2.2"/>
+  <circle cx="61.5" cy="83" r="3.2" fill="none" stroke="#0B6B40" stroke-width="2.4"/>
+  <path d="M64.2 83h8.2v2.6h-2.1v2.1h-2.4v-2.1H64" stroke="#0B6B40" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

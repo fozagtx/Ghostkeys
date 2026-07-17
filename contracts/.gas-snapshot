@@ -1,0 +1,5 @@
+SecretVaultTest:test_addAndRead() (gas: 86515)
+SecretVaultTest:test_emptyReverts() (gas: 11193)
+SecretVaultTest:test_getActiveSecrets() (gas: 122766)
+SecretVaultTest:test_onlyOwnerRows() (gas: 162534)
+SecretVaultTest:test_updateAndDelete() (gas: 82094)

@@ -1,0 +1,19 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html,
+body {
+  min-height: 100%;
+}
+
+body {
+  @apply bg-background text-foreground font-sans antialiased;
+  background-image:
+    radial-gradient(ellipse 90% 55% at 100% -10%, rgba(15, 138, 82, 0.09), transparent 55%),
+    radial-gradient(ellipse 70% 40% at 0% 100%, rgba(15, 138, 82, 0.05), transparent 50%);
+}
+
+.font-mono {
+  font-family: "IBM Plex Mono", ui-monospace, monospace;
+}

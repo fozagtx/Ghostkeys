@@ -1,0 +1,12 @@
+---
+import "../styles/global.css";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { LandingPage } from "../components/LandingPage";
+---
+
+<BaseLayout
+  title="GhostKeys · authenticator on Monad"
+  description="Your authenticator, tied to your wallet, not your phone."
+>
+  <LandingPage client:load />
+</BaseLayout>

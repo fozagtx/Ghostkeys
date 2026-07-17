@@ -1,0 +1,12 @@
+---
+import "../styles/global.css";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { VaultApp } from "../components/VaultApp";
+---
+
+<BaseLayout
+  title="GhostKeys · Open app"
+  description="Connect your wallet and manage authenticator codes."
+>
+  <VaultApp client:load />
+</BaseLayout>
