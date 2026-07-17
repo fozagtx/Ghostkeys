@@ -5,14 +5,14 @@
 
 export const APP_CONFIG = {
   /** Active network: "testnet" | "mainnet" */
-  network: "testnet" as "testnet" | "mainnet",
+  network: "mainnet" as "testnet" | "mainnet",
 
   testnet: {
     chainId: 10143,
     name: "Monad Testnet",
     rpcUrl: "https://testnet-rpc.monad.xyz",
     explorerUrl: "https://testnet.monadvision.com",
-    /** Deployed SecretVault */
+    /** Deployed SecretVault (testnet) */
     vaultAddress: "0xF4c908b91876a3fa839c1457f4eEfD119ED6901C" as `0x${string}`,
   },
 
@@ -21,8 +21,8 @@ export const APP_CONFIG = {
     name: "Monad",
     rpcUrl: "https://rpc.monad.xyz",
     explorerUrl: "https://monadvision.com",
-    /** Set after mainnet deploy */
-    vaultAddress: "0x0000000000000000000000000000000000000000" as `0x${string}`,
+    /** Deployed SecretVault (mainnet) */
+    vaultAddress: "0xF4c908b91876a3fa839c1457f4eEfD119ED6901C" as `0x${string}`,
   },
 } as const;
 

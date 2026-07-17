@@ -6,7 +6,8 @@ import ActionCard from "./ActionCard";
 import { BrandMark } from "./BrandMark";
 import { ConnectButton } from "./ConnectButton";
 import { useWallet } from "../lib/wallet";
-import { getActiveChain } from "../lib/chain";
+import { getActiveChain, getVaultAddress } from "../lib/chain";
+import { getNetworkConfig } from "../lib/config";
 
 /**
  * Marketing landing: shown until the wallet is connected.
@@ -14,6 +15,10 @@ import { getActiveChain } from "../lib/chain";
 export function LandingPage() {
   const { connect, connecting } = useWallet();
   const chain = getActiveChain();
+  const net = getNetworkConfig();
+  const vault = getVaultAddress();
+  const shortVault = `${vault.slice(0, 6)}…${vault.slice(-4)}`;
+  const contractUrl = `${net.explorerUrl}/address/${vault}`;
 
   return (
     <div className="mx-auto flex min-h-dvh w-full max-w-5xl flex-col gap-10 px-4 py-6 sm:px-6 sm:py-10">
@@ -38,15 +43,29 @@ export function LandingPage() {
         <div className="flex flex-1 flex-col items-start gap-6">
           <div className="flex flex-wrap gap-2">
             <Chip size="sm" color="primary" variant="flat">
-              On Monad
+              On {chain.name}
             </Chip>
             <Chip size="sm" variant="flat">
               Wallet-backed 2FA
             </Chip>
+            <Chip
+              as="a"
+              href={contractUrl}
+              target="_blank"
+              rel="noreferrer"
+              size="sm"
+              variant="bordered"
+              className="cursor-pointer font-mono"
+              startContent={
+                <Icon icon="solar:link-round-linear" width={14} />
+              }
+            >
+              Contract {shortVault}
+            </Chip>
           </div>
           <div className="flex max-w-xl flex-col gap-3">
             <h1 className="text-3xl font-semibold tracking-tight text-default-900 sm:text-4xl sm:leading-[1.15]">
-              Reaching for your phone for an auth code should never spoil deep work.
+              when the code hits and your phone is three rooms away
             </h1>
             <p className="text-medium leading-relaxed text-default-500">
               Let it live in your wallet. Connect on any device, copy the code,
@@ -76,6 +95,20 @@ export function LandingPage() {
               size="lg"
             >
               How it works
+            </Button>
+            <Button
+              as="a"
+              href={contractUrl}
+              target="_blank"
+              rel="noreferrer"
+              variant="light"
+              radius="full"
+              size="lg"
+              startContent={
+                <Icon icon="solar:document-text-linear" width={18} />
+              }
+            >
+              View contract
             </Button>
           </div>
         </div>
@@ -151,8 +184,16 @@ export function LandingPage() {
         ))}
       </section>
 
-      <footer className="pb-8 text-center text-tiny text-default-400">
-        GhostKeys · {chain.name}
+      <footer className="flex flex-col items-center gap-2 pb-8 text-center text-tiny text-default-400">
+        <p>GhostKeys · {chain.name}</p>
+        <a
+          href={contractUrl}
+          target="_blank"
+          rel="noreferrer"
+          className="font-mono text-primary underline-offset-2 hover:underline"
+        >
+          {vault}
+        </a>
       </footer>
     </div>
   );

@@ -5,7 +5,7 @@
 </p>
 
 <p align="center">
-  <strong>Reaching for your phone for an auth code should never spoil deep work. Let it live in your wallet.</strong>
+  <strong>when the code hits and your phone is three rooms away</strong>
 </p>
 
 GhostKeys is a wallet-backed authenticator on **Monad**. Save 2FA accounts once, unlock them on any device by connecting the same wallet, and copy time-based codes when you need them.
@@ -22,14 +22,15 @@ Then open http://localhost:4321 — connect your wallet on the landing page to o
 
 Network, RPC, and contract address are in `web/src/lib/config.ts` (not env).
 
-## Deployed contract (Monad Testnet)
+## Deployed contract (Monad mainnet)
 
 | | |
 |--|--|
-| Address | [`0xF4c908b91876a3fa839c1457f4eEfD119ED6901C`](https://testnet.monadvision.com/address/0xF4c908b91876a3fa839c1457f4eEfD119ED6901C) |
-| Chain ID | `10143` |
-| RPC | `https://testnet-rpc.monad.xyz` |
-| Config | `web/src/lib/config.ts` |
+| Address | [`0xF4c908b91876a3fa839c1457f4eEfD119ED6901C`](https://monadvision.com/address/0xF4c908b91876a3fa839c1457f4eEfD119ED6901C) |
+| Deploy tx | [`0x47fa19bd…c94943`](https://monadvision.com/tx/0x47fa19bdb027c05e478067497d1edacafc32eb07281224895df7a273e5c94943) |
+| Chain ID | `143` |
+| RPC | `https://rpc.monad.xyz` |
+| Config | `web/src/lib/config.ts` (`network: "mainnet"`) |
 
 ## How it works
 
