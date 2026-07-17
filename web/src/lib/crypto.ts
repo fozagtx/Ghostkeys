@@ -143,7 +143,7 @@ function assertUnlockContext(ctx: UnlockContext) {
     throw new Error("Incomplete unlock context");
   }
   if (ctx.vault === "0x0000000000000000000000000000000000000000") {
-    throw new Error("Vault address not configured");
+    throw new Error("GhostKeys contract address not configured");
   }
 }
 

@@ -46,29 +46,76 @@ export function WalletProvider({ children }: { children: ReactNode }) {
   const [address, setAddress] = useState<Address | undefined>();
   const [chainId, setChainId] = useState<number | undefined>();
   const [connecting, setConnecting] = useState(false);
+  /**
+   * Only true after the user clicks Connect (or we already have an intentional session).
+   * Silent eth_accounts on load does NOT auto-connect the app.
+   */
+  const [sessionActive, setSessionActive] = useState(false);
   const target = getActiveChain();
 
-  const sync = useCallback(async () => {
+  const readChainId = useCallback(async () => {
     const eth = getEthereum();
     if (!eth) return;
-    const accounts = (await eth.request({ method: "eth_accounts" })) as string[];
-    const cid = Number((await eth.request({ method: "eth_chainId" })) as string);
-    setChainId(cid);
-    setAddress(accounts[0] ? (accounts[0] as Address) : undefined);
+    try {
+      const cid = Number((await eth.request({ method: "eth_chainId" })) as string);
+      setChainId(cid);
+    } catch {
+      /* ignore */
+    }
   }, []);
 
+  const syncAccounts = useCallback(async () => {
+    const eth = getEthereum();
+    if (!eth) return;
+    try {
+      const accounts = (await eth.request({ method: "eth_accounts" })) as string[];
+      const cid = Number((await eth.request({ method: "eth_chainId" })) as string);
+      setChainId(cid);
+      if (!sessionActive) {
+        // Do not attach a wallet until the user clicks Connect
+        return;
+      }
+      if (!accounts[0]) {
+        setAddress(undefined);
+        setSessionActive(false);
+        return;
+      }
+      setAddress(accounts[0] as Address);
+    } catch {
+      /* ignore */
+    }
+  }, [sessionActive]);
+
+  // Track chain only on mount; never auto-attach accounts
   useEffect(() => {
-    void sync();
+    void readChainId();
+  }, [readChainId]);
+
+  useEffect(() => {
     const eth = getEthereum();
     if (!eth?.on) return;
-    const h = () => void sync();
-    eth.on("accountsChanged", h);
-    eth.on("chainChanged", h);
-    return () => {
-      eth.removeListener?.("accountsChanged", h);
-      eth.removeListener?.("chainChanged", h);
+
+    const onAccounts = (accounts: unknown) => {
+      const list = accounts as string[];
+      if (!list?.[0]) {
+        setAddress(undefined);
+        setSessionActive(false);
+        return;
+      }
+      // Only adopt account changes if user already connected in this session
+      if (sessionActive) {
+        setAddress(list[0] as Address);
+      }
     };
-  }, [sync]);
+    const onChain = () => void readChainId();
+
+    eth.on("accountsChanged", onAccounts);
+    eth.on("chainChanged", onChain);
+    return () => {
+      eth.removeListener?.("accountsChanged", onAccounts);
+      eth.removeListener?.("chainChanged", onChain);
+    };
+  }, [readChainId, sessionActive]);
 
   const connect = useCallback(async () => {
     const eth = getEthereum();
@@ -78,26 +125,35 @@ export function WalletProvider({ children }: { children: ReactNode }) {
     }
     setConnecting(true);
     try {
-      await eth.request({ method: "eth_requestAccounts" });
+      const accounts = (await eth.request({
+        method: "eth_requestAccounts",
+      })) as string[];
       try {
         await ensureMonadChain();
       } catch {
-        /* user may reject; still sync */
+        /* user may reject; still continue */
       }
-      await sync();
+      const cid = Number((await eth.request({ method: "eth_chainId" })) as string);
+      setChainId(cid);
+      if (accounts[0]) {
+        setAddress(accounts[0] as Address);
+        setSessionActive(true);
+      }
     } finally {
       setConnecting(false);
     }
-  }, [sync]);
+  }, []);
 
   const disconnect = useCallback(() => {
     setAddress(undefined);
+    setSessionActive(false);
   }, []);
 
   const switchNetwork = useCallback(async () => {
     await ensureMonadChain();
-    await sync();
-  }, [sync]);
+    await readChainId();
+    await syncAccounts();
+  }, [readChainId, syncAccounts]);
 
   const signUnlock = useCallback(async () => {
     const eth = getEthereum();
@@ -109,13 +165,12 @@ export function WalletProvider({ children }: { children: ReactNode }) {
       (await eth.request({ method: "eth_chainId" })) as string
     );
     if (currentChain !== chain.id) {
-      throw new Error(`Switch to ${chain.name} before unlocking`);
+      throw new Error(`Switch to ${chain.name} before continuing`);
     }
 
     const ctx = resolveUnlockContext(address);
     const msg = unlockMessageForAddress(address);
 
-    // personal_sign: [message, address]
     const signature = (await eth.request({
       method: "personal_sign",
       params: [msg, address],
@@ -124,13 +179,15 @@ export function WalletProvider({ children }: { children: ReactNode }) {
     return { signature, ctx };
   }, [address]);
 
-  const wrongNetwork = Boolean(chainId && chainId !== target.id);
+  const wrongNetwork = Boolean(
+    sessionActive && chainId && chainId !== target.id
+  );
 
   const value = useMemo(
     () => ({
       address,
       chainId,
-      isConnected: Boolean(address),
+      isConnected: Boolean(sessionActive && address),
       connecting,
       wrongNetwork,
       connect,
@@ -141,6 +198,7 @@ export function WalletProvider({ children }: { children: ReactNode }) {
     [
       address,
       chainId,
+      sessionActive,
       connecting,
       wrongNetwork,
       connect,

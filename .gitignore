@@ -21,3 +21,6 @@ contracts/.testnet-wallet.env
 *.testnet-wallet.env
 .idea/
 .vscode/
+.playwright-mcp/
+layout-*.png
+web/debug-*.png

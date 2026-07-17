@@ -5,7 +5,7 @@
 </p>
 
 <p align="center">
-  <strong>Your authenticator, tied to your wallet, not your phone.</strong>
+  <strong>Reaching for your phone for an auth code should never spoil deep work. Let it live in your wallet.</strong>
 </p>
 
 GhostKeys is a wallet-backed authenticator on **Monad**. Save 2FA accounts once, unlock them on any device by connecting the same wallet, and copy time-based codes when you need them.
@@ -14,19 +14,13 @@ GhostKeys is a wallet-backed authenticator on **Monad**. Save 2FA accounts once,
 
 ```bash
 cd web
-cp .env.example .env
 npm install
 npm run dev
 ```
 
-Then open:
+Then open http://localhost:4321 — connect your wallet on the landing page to open GhostKeys.
 
-| Page | URL |
-|------|-----|
-| Landing | http://localhost:4321 |
-| App | http://localhost:4321/app |
-
-`.env.example` already points at the deployed testnet vault. You only need to change it if you redeploy.
+Network, RPC, and contract address are in `web/src/lib/config.ts` (not env).
 
 ## Deployed contract (Monad Testnet)
 
@@ -35,11 +29,12 @@ Then open:
 | Address | [`0xF4c908b91876a3fa839c1457f4eEfD119ED6901C`](https://testnet.monadvision.com/address/0xF4c908b91876a3fa839c1457f4eEfD119ED6901C) |
 | Chain ID | `10143` |
 | RPC | `https://testnet-rpc.monad.xyz` |
+| Config | `web/src/lib/config.ts` |
 
 ## How it works
 
 1. Connect your wallet on Monad.
-2. Sign to unlock (bound to this site, network, wallet, and vault). No gas for unlock.
+2. Sign to unlock (bound to this site, network, wallet, and contract). No gas for unlock.
 3. Add a 2FA setup key. Encryption happens in the browser.
 4. Encrypted data is stored on Monad. Codes are generated on your device.
 
@@ -62,11 +57,11 @@ forge script script/DeploySecretVault.s.sol:DeploySecretVault \
   --private-key $PRIVATE_KEY
 ```
 
-Then put the new address in `web/.env` as `PUBLIC_VAULT_ADDRESS`.
+Then put the new address in `web/src/lib/config.ts` (`vaultAddress`).
 
 ## Security
 
-- Unlock is bound to site origin, chain, wallet, and vault address.
+- Unlock is bound to site origin, chain, wallet, and contract address.
 - Unlock session stays in the browser tab until you lock, refresh, or switch wallet.
 - Prefer demo or low-risk accounts on testnet.
 - Not a formal security audit.

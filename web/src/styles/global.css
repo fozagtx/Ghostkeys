@@ -5,6 +5,7 @@
 html,
 body {
   min-height: 100%;
+  height: 100%;
 }
 
 body {
@@ -12,6 +13,12 @@ body {
   background-image:
     radial-gradient(ellipse 90% 55% at 100% -10%, rgba(15, 138, 82, 0.09), transparent 55%),
     radial-gradient(ellipse 70% 40% at 0% 100%, rgba(15, 138, 82, 0.05), transparent 50%);
+  background-attachment: fixed;
+}
+
+/* App shell fills the viewport without double scrollbars */
+astro-island {
+  display: contents;
 }
 
 .font-mono {

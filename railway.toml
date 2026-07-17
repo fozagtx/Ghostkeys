@@ -1,0 +1,8 @@
+# GhostKeys web (Astro + Node). App source is in web/.
+[build]
+builder = "RAILPACK"
+buildCommand = "npm run build"
+
+[deploy]
+startCommand = "npm run start"
+restartPolicyType = "ON_FAILURE"

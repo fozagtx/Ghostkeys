@@ -25,7 +25,7 @@ export function BrandMark({ size = 40, className, framed = false }: BrandMarkPro
           alt="GhostKeys"
           width={size}
           height={size}
-          className="h-full w-full object-cover"
+          className="h-full w-full object-contain"
         />
       </span>
     );

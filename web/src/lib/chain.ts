@@ -1,48 +1,44 @@
 import { defineChain } from "viem";
+import { APP_CONFIG, getNetworkConfig } from "./config";
 
 export const monadTestnet = defineChain({
-  id: 10143,
-  name: "Monad Testnet",
+  id: APP_CONFIG.testnet.chainId,
+  name: APP_CONFIG.testnet.name,
   nativeCurrency: { name: "Monad", symbol: "MON", decimals: 18 },
   rpcUrls: {
-    default: { http: ["https://testnet-rpc.monad.xyz"] },
+    default: { http: [APP_CONFIG.testnet.rpcUrl] },
   },
   blockExplorers: {
-    default: { name: "MonadVision", url: "https://testnet.monadvision.com" },
+    default: { name: "MonadVision", url: APP_CONFIG.testnet.explorerUrl },
   },
 });
 
 export const monadMainnet = defineChain({
-  id: 143,
-  name: "Monad",
+  id: APP_CONFIG.mainnet.chainId,
+  name: APP_CONFIG.mainnet.name,
   nativeCurrency: { name: "Monad", symbol: "MON", decimals: 18 },
   rpcUrls: {
-    default: { http: ["https://rpc.monad.xyz"] },
+    default: { http: [APP_CONFIG.mainnet.rpcUrl] },
   },
   blockExplorers: {
-    default: { name: "MonadVision", url: "https://monadvision.com" },
+    default: { name: "MonadVision", url: APP_CONFIG.mainnet.explorerUrl },
   },
 });
 
-/** Prefer mainnet if env says so; default testnet for free deploy/demo. */
 export function getActiveChain() {
-  const id = Number(import.meta.env.PUBLIC_CHAIN_ID ?? "10143");
-  return id === 143 ? monadMainnet : monadTestnet;
+  return APP_CONFIG.network === "mainnet" ? monadMainnet : monadTestnet;
 }
 
 export function getRpcUrl() {
-  return (
-    import.meta.env.PUBLIC_MONAD_RPC ??
-    getActiveChain().rpcUrls.default.http[0]
-  );
+  return getNetworkConfig().rpcUrl;
 }
 
 export function getVaultAddress(): `0x${string}` {
-  const a = import.meta.env.PUBLIC_VAULT_ADDRESS as string | undefined;
-  if (a && /^0x[a-fA-F0-9]{40}$/.test(a)) return a as `0x${string}`;
-  return "0x0000000000000000000000000000000000000000";
+  return getNetworkConfig().vaultAddress;
 }
 
 export function isVaultConfigured() {
-  return getVaultAddress() !== "0x0000000000000000000000000000000000000000";
+  return (
+    getVaultAddress() !== "0x0000000000000000000000000000000000000000"
+  );
 }
